@@ -30,7 +30,7 @@ class ValueError extends Error {
   }
 }
 
-window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, duration=500 ) {
+window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, duration=250 ) {
   /* x: type:Number
    * y: type:Number
    * easing: type:String or type:Array( Float ) length:4
@@ -73,8 +73,6 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
   // Check duration
   if ( typeof duration !== 'number' )
     throw TypeError( `duration is of type: ${ typeof duration}; it should be of type: number` )
-  if ( duration < 1 )
-    throw new ValueError( `duration should be at least 1 it is: ${ duration }` )
   
   // Run animation loop
   let elapsed = 0
@@ -82,7 +80,7 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
         startX = window.scrollX,
         startY = window.scrollY,
         loop = setInterval( () => {
-          elapsed += ( 1 / 30 ) * 1000
+          elapsed += ( 1 / 60 ) * 1000
           
           if ( elapsed >= duration ) {
             window.scrollTo( x, y )
@@ -97,7 +95,7 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
             startX + ( ( x - startX ) * scrollPercentage ),
             startY + ( ( y - startY ) * scrollPercentage )
           )
-        }, ( 1 / 30 ) * 1000 ) // thirty frames per second
+        }, ( 1 / 60 ) * 1000 ) // thirty frames per second
 }
 
 Object.defineProperty( HTMLElement.prototype, 'smoothScrollIntoView', {
