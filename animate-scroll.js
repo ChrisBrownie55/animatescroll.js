@@ -80,7 +80,7 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
         startX = window.scrollX,
         startY = window.scrollY,
         loop = setInterval( () => {
-          let elapsed = ( new Date() - startTime )
+          let elapsed = new Date() - startTime
           
           if ( elapsed >= duration ) {
             window.scrollTo( x, y )
