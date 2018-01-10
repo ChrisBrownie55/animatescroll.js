@@ -75,12 +75,12 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
     throw TypeError( `duration is of type: ${ typeof duration}; it should be of type: number` )
   
   // Run animation loop
-  let elapsed = 0
+  const startTime = new Date()
   const easingFunc = bezier( ...easing ),
         startX = window.scrollX,
         startY = window.scrollY,
         loop = setInterval( () => {
-          elapsed += ( 1 / 60 ) * 1000
+          let elapsed = ( new Date() - startTime ) / duration
           
           if ( elapsed >= duration ) {
             window.scrollTo( x, y )
