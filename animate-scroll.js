@@ -108,8 +108,6 @@ Object.defineProperty( HTMLElement.prototype, 'smoothScrollIntoView', {
     // Check block
     if ( typeof block !== 'string' )
       throw TypeError( `block is of type: ${ typeof block }; it should be of type: string` )
-    if( ![ 'center', 'start', 'end' ].some( s => block === s ) )
-      throw new ValueError( `block is: '${ block }'; it should be one of the following values: 'center', 'start', or 'end'` )
     
     let rect = this.getBoundingClientRect(),
         y,
@@ -120,9 +118,11 @@ Object.defineProperty( HTMLElement.prototype, 'smoothScrollIntoView', {
     } else if ( block === 'center' ) {
       y = window.scrollY + rect.y - ( rect.height / 2 )
       x = window.scrollX + rect.x - ( rect.width / 2 )
-    } else {
+    } else if ( block === 'end' ) {
       y = window.scrollY + rect.y - rect.height
       x = window.scrollX + rect.x - rect.width
+    } else {
+      throw new ValueError( `block is: '${ block }'; it should be one of the following values: 'center', 'start', or 'end'` )
     }
     window.smoothScrollTo( x, y, easing, duration )
   },
