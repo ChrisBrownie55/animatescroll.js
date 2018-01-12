@@ -29,10 +29,21 @@ class ValueError extends Error {
   }
 }
 
-function preventScrolling( event ) {
+function preventScrollEvent( event ) {
   event.preventDefault()
-  window.scrollBy( 0 )
-  return false
+  event.returnValue = false
+}
+
+window.disableScroll = function() {
+  window.addEventListener( 'scroll', preventScrollEvent )
+  window.addEventListener( 'wheel', preventScrollEvent )
+  window.addEventListener( 'touchmove', preventScrollEvent )
+}
+
+window.enableScroll = function() {
+  window.removeEventListener( 'scroll', preventScrollEvent )
+  window.removeEventListener( 'wheel', preventScrollEvent )
+  window.removeEventListener( 'touchmove', preventScrollEvent )
 }
 
 window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, duration=250 ) {
@@ -80,7 +91,7 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
     throw TypeError( `duration is of type: ${ typeof duration}; it should be of type: number` )
   
   // Stop user from scrolling
-  window.addEventListener( 'scroll', preventScrolling )
+  window.disableScroll()
   
   // Run animation loop every 1/60 of a second
   const startTime = new Date()
@@ -93,7 +104,7 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
           if ( elapsed >= duration ) {
             window.scrollTo( x, y )
             clearInterval( loop )
-            window.removeEventListener( 'scroll', preventScrolling )
+            window.enableScroll()
             return
           }
           
