@@ -29,21 +29,22 @@ class ValueError extends Error {
   }
 }
 
-function preventScrollEvent( event ) {
+function preventEvent( event ) {
   event.preventDefault()
   event.returnValue = false
+  return false
 }
 
 window.disableScroll = function() {
-  window.addEventListener( 'scroll', preventScrollEvent )
-  window.addEventListener( 'wheel', preventScrollEvent )
-  window.addEventListener( 'touchmove', preventScrollEvent )
+  window.addEventListener( 'scroll', preventEvent )
+  window.addEventListener( 'wheel', preventEvent )
+  window.addEventListener( 'touchmove', preventEvent )
 }
 
 window.enableScroll = function() {
-  window.removeEventListener( 'scroll', preventScrollEvent )
-  window.removeEventListener( 'wheel', preventScrollEvent )
-  window.removeEventListener( 'touchmove', preventScrollEvent )
+  window.removeEventListener( 'scroll', preventEvent )
+  window.removeEventListener( 'wheel', preventEvent )
+  window.removeEventListener( 'touchmove', preventEvent )
 }
 
 window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, duration=250 ) {
