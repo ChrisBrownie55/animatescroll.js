@@ -6,7 +6,6 @@
  */
 
 
-
 // MAKE A PULL REQUEST FOR MORE EASING FUNCTIONS
 const easingFunctions = {
   linear: [ 0, 0, 1, 1 ],
@@ -28,6 +27,12 @@ class ValueError extends Error {
     if ( Error.captureStackTrace )
       Error.captureStackTrace( this, ValueError )
   }
+}
+
+function preventScrolling( event ) {
+  event.preventDefault()
+  window.scrollBy( 0 )
+  return false
 }
 
 window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, duration=250 ) {
@@ -74,7 +79,10 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
   if ( typeof duration !== 'number' )
     throw TypeError( `duration is of type: ${ typeof duration}; it should be of type: number` )
   
-  // Run animation loop
+  // Stop user from scrolling
+  window.addEventListener( 'scroll', preventScrolling )
+  
+  // Run animation loop every 1/60 of a second
   const startTime = new Date()
   const easingFunc = bezier( ...easing ),
         startX = window.scrollX,
@@ -85,6 +93,7 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
           if ( elapsed >= duration ) {
             window.scrollTo( x, y )
             clearInterval( loop )
+            window.removeEventListener( 'scroll', preventScrolling )
             return
           }
           
@@ -95,7 +104,7 @@ window.smoothScrollTo = function( x=0, y=0, easing=easingFunctions.linear, durat
             startX + ( ( x - startX ) * scrollPercentage ),
             startY + ( ( y - startY ) * scrollPercentage )
           )
-        }, ( 1 / 60 ) * 1000 ) // thirty frames per second
+        }, ( 1 / 60 ) * 1000 )
 }
 
 Object.defineProperty( HTMLElement.prototype, 'smoothScrollIntoView', {
